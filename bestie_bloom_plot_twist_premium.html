@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f9c6df">
+<meta name="description" content="A tiny interactive surprise for someone special.">
+<title>For Someone Special ✨</title>
+<style>
+:root{--ink:#48243f;--muted:#86657d;--pink:#ff70ae;--rose:#ffb7d6;--lilac:#a98bff;--gold:#ffdb9b;--paper:#fffafd}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100svh;padding:20px 14px 32px;display:grid;place-items:center;overflow-x:hidden;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:radial-gradient(ellipse at 0% 0%,#ffe0ed 0,transparent 43%),radial-gradient(ellipse at 100% 100%,#ddd2ff 0,transparent 40%),linear-gradient(140deg,#fff7fa,#f9f3ff 55%,#fff9ee)}
+button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ambient{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-1}
+.orb{position:absolute;border-radius:50%;filter:blur(2px);opacity:.55;animation:float 9s ease-in-out infinite}
+.orb.a{width:220px;height:220px;background:#ffc5df;top:-85px;left:-70px}.orb.b{width:260px;height:260px;background:#d9caff;right:-105px;bottom:-95px;animation-delay:-4s}
+@keyframes float{50%{transform:translateY(-20px) rotate(8deg)}}
+.page{width:min(100%,470px)}
+.topline{text-align:center;font-size:10px;letter-spacing:2px;font-weight:900;color:#a75a8b;margin:4px 0 14px}
+.card{position:relative;text-align:center;padding:26px clamp(17px,5vw,30px) 24px;border:1px solid #ffffffed;border-radius:30px;background:#ffffffc9;box-shadow:0 26px 80px #a95d9828;backdrop-filter:blur(16px);overflow:hidden}
+.card:before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,#ff7eaf,#b8a0ff,#ffd6a0,#ff7eaf);background-size:200% 100%;animation:shine 5s linear infinite}
+@keyframes shine{to{background-position:200% 0}}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:99px;background:#fff0f7;color:#bb4d88;font-size:11px;font-weight:900}
+.hero{position:relative;width:130px;height:130px;margin:19px auto 17px;display:grid;place-items:center;border-radius:42% 58% 50% 50%;background:linear-gradient(145deg,#ffe0ed,#e3d9ff);box-shadow:inset 0 0 0 7px #ffffff91;animation:bob 3.3s ease-in-out infinite}
+.hero .bear{font-size:69px;filter:drop-shadow(0 6px 5px #a56d8730)}
+.float-icon{position:absolute;font-size:24px;animation:twinkle 2s ease-in-out infinite}
+.fi1{top:-5px;right:-8px}.fi2{bottom:0;left:-12px;animation-delay:-1s}
+@keyframes bob{50%{transform:translateY(-5px) rotate(3deg)}}@keyframes twinkle{50%{transform:scale(1.17) rotate(10deg)}}
+h1{font-size:clamp(2.45rem,10vw,3.35rem);line-height:.98;letter-spacing:-1.8px;margin:0 0 13px}
+.gradient{background:linear-gradient(100deg,#f3549a,#9670ef);-webkit-background-clip:text;background-clip:text;color:transparent}
+.intro{max-width:340px;margin:0 auto 22px;color:var(--muted);font-size:14px;line-height:1.7}
+label{display:block;text-align:left;font-size:11px;font-weight:900;letter-spacing:1px;margin:0 0 8px 4px}
+input{width:100%;min-height:53px;padding:14px 15px;border-radius:16px;border:2px solid #f2d5e5;background:#fffafd;color:var(--ink);outline:none}
+input:focus{border-color:#f078ad;box-shadow:0 0 0 4px #ff9fc633}
+.btn{display:flex;justify-content:center;align-items:center;gap:8px;width:100%;min-height:51px;padding:13px 15px;border:0;border-radius:16px;font-weight:900;transition:transform .18s,filter .18s}
+.btn:hover{transform:translateY(-2px);filter:saturate(1.1)}.btn:active{transform:scale(.98)}
+.primary{margin-top:12px;color:white;background:linear-gradient(100deg,#ff70ad,#aa83f5);box-shadow:0 10px 24px #d779b54a}
+.under{font-size:11px;color:#a3869c;margin:12px 0 0}
+.result{display:none;margin-top:18px;padding:20px 15px 16px;border:1px solid #f5d7e8;border-radius:23px;background:linear-gradient(145deg,#fff0f7,#f4efff);animation:pop .45s ease}
+.result.show{display:block}@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+.kicker{font-size:10px;font-weight:900;letter-spacing:1.6px;color:#ba5891}
+.result h2{font-size:clamp(1.65rem,7vw,2.15rem);line-height:1.15;color:#db5798;margin:9px 0;overflow-wrap:anywhere}
+.result p{font-size:14px;line-height:1.75;color:#75556f;margin:0}
+.stars{letter-spacing:5px;color:#d99a40;font-size:16px;margin:10px 0}
+.secret{display:none;margin-top:13px;padding:15px 13px;border-radius:17px;background:#fff;box-shadow:0 6px 20px #b77da315;text-align:left;font-size:14px;line-height:1.75;color:#6d4a65}
+.secret.show{display:block;animation:pop .3s ease}.secret strong{color:#d64d94}
+.buttons{display:grid;gap:9px;margin-top:13px}
+.soft{background:#fff;color:#a04e84;border:1px solid #efcde0}
+.note{font-size:10px;color:#a78ba0;line-height:1.5;margin:14px 4px 0}
+.footer{text-align:center;color:#a1849a;font-size:11px;margin:15px 0 0}
+.heart{position:fixed;bottom:-35px;z-index:10;pointer-events:none;animation:rise linear forwards}
+@keyframes rise{to{transform:translateY(-115svh) rotate(40deg);opacity:0}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="ambient"><div class="orb a"></div><div class="orb b"></div></div>
+<main class="page">
+  <div class="topline">✦ A LITTLE SOMETHING, JUST FOR YOU ✦</div>
+  <section class="card">
+    <div class="pill">💌 TOP SECRET • OPEN WITH A SMILE</div>
+    <div class="hero" aria-hidden="true"><span class="bear">🧸</span><span class="float-icon fi1">💖</span><span class="float-icon fi2">✨</span></div>
+    <h1>Hey, <span class="gradient">you!</span></h1>
+    <p class="intro">Okay, so… I made a whole website instead of acting normal. 😂<br>Enter your name to see why you’re the main character today.</p>
+    <form id="nameForm">
+      <label for="crushName">THE MAIN CHARACTER'S NAME 🌷</label>
+      <input id="crushName" maxlength="32" placeholder="Your name goes here..." autocomplete="off" required>
+      <button class="btn primary" type="submit">Open my little surprise <span>✨</span></button>
+    </form>
+    <p class="under">⚠️ May cause blushing, giggling & suspicious smiling.</p>
+    <section class="result" id="result" aria-live="polite">
+      <div class="kicker">✨ OFFICIAL VIBE CHECK ✨</div>
+      <h2 id="greeting"></h2>
+      <div class="stars">★ ★ ★ ★ ★</div>
+      <p id="message"></p>
+      <button class="btn primary" id="revealBtn" type="button">Unlock the secret note 🔐</button>
+      <div class="secret" id="secret"></div>
+      <div class="buttons">
+        <button class="btn soft" id="anotherBtn" type="button">One more surprise? 👀</button>
+        <button class="btn soft" id="shareBtn" type="button">Share this page 💌</button>
+        <button class="btn soft" id="resetBtn" type="button">Start again ↻</button>
+      </div>
+      <p class="note">P.S. No pressure to say anything clever. A smile is already a pretty great reply. 💗</p>
+    </section>
+  </section>
+  <p class="footer">Made with a little courage, lots of code & tiny butterflies ♡</p>
+</main>
+<script>
+const form=document.getElementById('nameForm'), input=document.getElementById('crushName');
+const result=document.getElementById('result'), secret=document.getElementById('secret');
+let name='', jokeIndex=0, secretOpen=false;
+const jokes=[
+  'Breaking news: {NAME} has officially been rated 10/10 for vibes. The judges are biased (it’s me), but the result stands. 😂💗',
+  'Quick question: are you always this effortlessly cool, or did you update your software overnight? Because wow. 😌✨',
+  'Your smile has been reported for being a public distraction. Please continue responsibly. 🚨🌸',
+  'If being adorable were an exam, you would ask “is this for marks?” and still get full score. 📚💘'
+];
+const notes=[
+  'Okay, tiny confession: making this page was my very dramatic way of saying… <strong>you make ordinary conversations feel a little more special.</strong> No pressure, just wanted to make you smile. 💗',
+  'Secret note unlocked 🔓: <strong>I genuinely like your vibe.</strong> You make me smile more than I planned to admit. Please do not let this information go to your head. 😂💌'
+];
+function confetti(){
+  const bits=['💗','💖','✨','🌸','💕','🫶'];
+  for(let i=0;i<24;i++){const el=document.createElement('span');el.className='heart';el.textContent=bits[Math.floor(Math.random()*bits.length)];el.style.left=Math.random()*100+'vw';el.style.animationDuration=(3+Math.random()*3)+'s';el.style.fontSize=(15+Math.random()*18)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),6500)}
+}
+form.addEventListener('submit',e=>{
+ e.preventDefault();name=input.value.trim();if(!name)return;
+ document.getElementById('greeting').textContent=`${name}, you're a whole plot twist 💘`;
+ document.getElementById('message').textContent=jokes[0].replaceAll('{NAME}',name);
+ jokeIndex=0;secretOpen=false;secret.classList.remove('show');secret.innerHTML='';
+ document.getElementById('revealBtn').textContent='Unlock the secret note 🔐';
+ result.classList.add('show');confetti();result.scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+document.getElementById('revealBtn').addEventListener('click',()=>{
+ secretOpen=!secretOpen;
+ if(secretOpen){secret.innerHTML=notes[0];secret.classList.add('show');document.getElementById('revealBtn').textContent='Awww, hide the note 🙈';confetti()}
+ else{secret.classList.remove('show');document.getElementById('revealBtn').textContent='Unlock the secret note 🔐'}
+});
+document.getElementById('anotherBtn').addEventListener('click',()=>{
+ jokeIndex=(jokeIndex+1)%jokes.length;document.getElementById('message').textContent=jokes[jokeIndex].replaceAll('{NAME}',name);confetti();
+});
+document.getElementById('resetBtn').addEventListener('click',()=>{result.classList.remove('show');secret.classList.remove('show');input.value='';input.focus();window.scrollTo({top:0,behavior:'smooth'})});
+document.getElementById('shareBtn').addEventListener('click',async()=>{
+ const shareData={title:'A little surprise 💌',text:`A little surprise for ${name || 'you'} 💗`,url:location.href};
+ if(navigator.share){try{await navigator.share(shareData)}catch(e){}}
+ else if(navigator.clipboard){try{await navigator.clipboard.writeText(`${shareData.text}\n${location.href}`);document.getElementById('shareBtn').textContent='Copied! Paste it in chat 💗'}catch(e){alert(`${shareData.text}\n${location.href}`)}}
+ else alert(`${shareData.text}\n${location.href}`);
+});
+</script>
+</body>
+</html>
